@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - TOPCIT Buddy</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2196F3;
+            --secondary-blue: #64B5F6;
+            --dark-blue: #1565C0;
+            --light-blue: #E3F2FD;
+            --darker-blue: #0D47A1;
+            --success-green: #4caf50;
+            --warning-orange: #ff9800;
+            --danger-red: #f44336;
+            --purple: #9c27b0;
+            --text-dark: #212121;
+            --text-gray: #757575;
+            --bg-light: #f5f7fa;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+            --shadow-xl: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E3F2FD 0%, #f5f7fa 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: var(--white);
+            padding: 20px 40px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark-blue);
+        }
+
+        .logo-small {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-small:hover {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-blue);
+            background: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a.active {
+            color: var(--white);
+            background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .nav-menu a.highlight {
+            color: var(--primary-blue);
+            box-shadow: inset 0 0 0 2px var(--primary-blue), 0 2px 8px rgba(33, 150, 243, 0.2);
+            font-weight: 600;
+        }
+
+        /* Container */
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+            color: var(--white);
+            padding: 56px;
+            border-radius: 20px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .profile-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-info h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .profile-info p {
+            font-size: 17px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Profile Stats Row */
+        .profile-stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            color: var(--primary-blue);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: var(--success-green);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            color: var(--warning-orange);
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            color: var(--purple);
+        }
+
+        .stat-info h3 {
+            font-size: 36px;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            color: var(--text-gray);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .section-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 32px;
+            animation: slideUp 0.6s ease;
+        }
+
+        .section-card h2 {
+            font-size: 28px;
+            color: var(--dark-blue);
+            margin-bottom: 32px;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .no-data {
+            color: var(--text-gray);
+            font-style: italic;
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            background: var(--white);
+            padding: 20px 28px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            min-width: 320px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            animation: slideUp 0.3s ease;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-green);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-red);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+            
+            .nav-menu {
+                gap: 16px;
+                font-size: 14px;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 32px 24px;
+            }
+            
+            .profile-info h1 {
+                font-size: 32px;
+            }
+            
+            .profile-stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo-small">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                    <path d="M24 4L6 14V24C6 34 14 42 24 44C34 42 42 34 42 24V14L24 4Z" fill="white"/>
+                    <path d="M24 14L16 18V24C16 28 20 32 24 34C28 32 32 28 32 24V18L24 14Z" fill="#2196F3"/>
+                </svg>
+            </div>
+            <span>TOPCIT Buddy</span>
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="progress.html" class="highlight">Progress</a>
+            <a href="achievements.html" class="highlight">Achievements</a>
+            <a href="profile.html" class="active">Profile</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">A</div>
+            <div class="profile-info">
+                <h1 id="profileName">Ali</h1>
+                <p>TOPCIT Certification Candidate</p>
+                <p style="margin-top: 8px; opacity: 0.8;">Member since <span id="memberSince"></span></p>
+            </div>
+        </div>
+        
+        <div class="profile-stats-row">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalAttempted">0</h3>
+                    <p>Total Questions</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="overallAccuracy">0%</h3>
+                    <p>Overall Accuracy</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="testsCompleted">0</h3>
+                    <p>Tests Completed</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalTime">0h</h3>
+                    <p>Total Study Time</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <h2>Recent Activity</h2>
+            <div id="recentActivity">
+                <p class="no-data">No recent activity</p>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <h2>Best Performance</h2>
+            <div class="stats-grid" style="margin-top: 20px;">
+                <div style="padding: 20px; background: var(--bg-light); border-radius: 12px;">
+                    <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 8px;">Best Exam Score</p>
+                    <h3 style="font-size: 32px; color: var(--success-green);" id="bestExam">-</h3>
+                </div>
+                <div style="padding: 20px; background: var(--bg-light); border-radius: 12px;">
+                    <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 8px;">Best Quiz Score</p>
+                    <h3 style="font-size: 32px; color: var(--success-green);" id="bestQuiz">-</h3>
+                </div>
+                <div style="padding: 20px; background: var(--bg-light); border-radius: 12px;">
+                    <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 8px;">Current Streak</p>
+                    <h3 style="font-size: 32px; color: var(--warning-orange);" id="streak">0 days</h3>
+                </div>
+                <div style="padding: 20px; background: var(--bg-light); border-radius: 12px;">
+                    <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 8px;">Longest Streak</p>
+                    <h3 style="font-size: 32px; color: var(--primary-blue);" id="longestStreak">0 days</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Authentication
+        function isAuthenticated() {
+            return localStorage.getItem('topcit_logged_in') === 'true';
+        }
+
+        function logout() {
+            localStorage.removeItem('topcit_logged_in');
+            window.location.href = 'index.html';
+        }
+
+        // User Data Management
+        function getUserData() {
+            const data = localStorage.getItem('topcit_user_data');
+            return data ? JSON.parse(data) : null;
+        }
+
+        // Notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Load Profile
+        function loadProfile() {
+            const userData = getUserData();
+            const userName = localStorage.getItem('topcit_username') || 'Ali';
+            
+            document.getElementById('profileName').textContent = userName;
+            
+            const memberDate = new Date(userData.memberSince);
+            document.getElementById('memberSince').textContent = memberDate.toLocaleDateString();
+            
+            document.getElementById('totalAttempted').textContent = userData.totalQuestions;
+            
+            const accuracy = userData.totalQuestions > 0 
+                ? Math.round((userData.correctAnswers / userData.totalQuestions) * 100) 
+                : 0;
+            document.getElementById('overallAccuracy').textContent = accuracy + '%';
+            
+            document.getElementById('testsCompleted').textContent = userData.testsCompleted;
+            
+            const hours = Math.floor(userData.studyTime / 3600);
+            const minutes = Math.floor((userData.studyTime % 3600) / 60);
+            document.getElementById('totalTime').textContent = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+            
+            const examTests = userData.testHistory.filter(t => t.type === 'exam');
+            const quizTests = userData.testHistory.filter(t => t.type === 'quiz');
+            
+            const bestExam = examTests.length > 0 ? Math.max(...examTests.map(t => t.score)) : 0;
+            const bestQuiz = quizTests.length > 0 ? Math.max(...quizTests.map(t => t.score)) : 0;
+            
+            document.getElementById('bestExam').textContent = bestExam > 0 ? bestExam + '%' : '-';
+            document.getElementById('bestQuiz').textContent = bestQuiz > 0 ? bestQuiz + '%' : '-';
+            
+            document.getElementById('streak').textContent = userData.streaks.current + ' days';
+            document.getElementById('longestStreak').textContent = userData.streaks.longest + ' days';
+            
+            const activityContainer = document.getElementById('recentActivity');
+            if (userData.testHistory.length > 0) {
+                activityContainer.innerHTML = userData.testHistory.slice(0, 5).map(test => {
+                    const date = new Date(test.date);
+                    return `
+                        <div style="padding: 16px; background: var(--bg-light); border-radius: 10px; margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>${test.type === 'exam' ? 'TOPCIT Exam' : test.type === 'quiz' ? 'Fast Quiz' : test.type === 'daily' ? 'Daily Challenge' : 'Practice Test'}</strong>
+                                    <p style="font-size: 13px; color: var(--text-gray); margin-top: 4px;">
+                                        ${date.toLocaleString()}
+                                    </p>
+                                </div>
+                                <div style="font-size: 24px; font-weight: 700; color: ${test.score >= 80 ? 'var(--success-green)' : test.score >= 60 ? 'var(--warning-orange)' : 'var(--danger-red)'};">
+                                    ${test.score}%
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Check authentication
+        if (!isAuthenticated()) {
+            window.location.href = 'index.html';
+        }
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+        });
+
+        // Load profile data
+        loadProfile();
+    </script>
+</body>
+</html>

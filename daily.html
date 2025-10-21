@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Challenge - TOPCIT Buddy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-blue: #2196F3;
+            --dark-blue: #1565C0;
+            --light-blue: #E3F2FD;
+            --success-green: #4caf50;
+            --text-dark: #212121;
+            --text-gray: #757575;
+            --bg-light: #f5f7fa;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+            --shadow-xl: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E3F2FD 0%, #f5f7fa 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .navbar {
+            background: var(--white);
+            padding: 20px 40px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark-blue);
+        }
+
+        .logo-small {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .daily-challenge-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .daily-banner {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 48px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 32px;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-banner::before {
+            content: '⭐';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 200px;
+            opacity: 0.1;
+            animation: spin 20s linear infinite;
+        }
+
+        .daily-banner h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .daily-banner p {
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .daily-status {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .daily-status h3 {
+            font-size: 24px;
+            color: var(--dark-blue);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+            color: var(--white);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
+            padding: 18px 40px;
+            font-size: 18px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(33, 150, 243, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 18px 40px;
+            font-size: 18px;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo-small">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                    <path d="M24 4L6 14V24C6 34 14 42 24 44C34 42 42 34 42 24V14L24 4Z" fill="white"/>
+                    <path d="M24 14L16 18V24C16 28 20 32 24 34C28 32 32 28 32 24V18L24 14Z" fill="#2196F3"/>
+                </svg>
+            </div>
+            <span>TOPCIT Buddy</span>
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="daily-challenge-container">
+        <div class="daily-banner">
+            <h1>⭐ Daily Certification Challenge ⭐</h1>
+            <p>Complete today's challenge and earn a certificate with 85%+ score!</p>
+        </div>
+        
+        <div class="daily-status" id="dailyStatus">
+            <h3>Ready to take today's challenge?</h3>
+            <p style="color: var(--text-gray); margin-bottom: 24px;">25 questions • 20 minutes • Score 85% or higher to earn a certificate</p>
+            <button class="btn btn-primary" onclick="startDailyChallenge()">
+                🏁 Start Challenge
+            </button>
+        </div>
+    </div>
+    
+    <script src="questions-data.js"></script>
+    <script>
+        if (localStorage.getItem('topcit_logged_in') !== 'true') { window.location.href = 'index.html'; }
+        document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('topcit_logged_in'); window.location.href = 'index.html'; });
+        
+        function getUserData() { const data = localStorage.getItem('topcit_user_data'); return data ? JSON.parse(data) : null; }
+        
+        function canAttemptDaily() {
+            const userData = getUserData();
+            const today = new Date().toDateString();
+            const lastAttempt = userData.dailyChallenge.lastAttempt;
+            return !lastAttempt || new Date(lastAttempt).toDateString() !== today;
+        }
+        
+        function startDailyChallenge() {
+            if (!canAttemptDaily()) {
+                alert("You've already completed today's challenge!");
+                return;
+            }
+            const shuffled = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5);
+            const dailyQuestions = shuffled.slice(0, 25);
+            sessionStorage.setItem('dailyChallenge', JSON.stringify(dailyQuestions));
+            window.location.href = 'daily-quiz.html';
+        }
+        
+        if (!canAttemptDaily()) {
+            document.getElementById('dailyStatus').innerHTML = `
+                <h3 style="color: var(--success-green);">✅ Challenge Completed!</h3>
+                <p style="color: var(--text-gray); margin-bottom: 24px;">You've already completed today's challenge. Come back tomorrow!</p>
+                <a href="dashboard.html" class="btn btn-secondary">
+                    ← Back to Dashboard
+                </a>
+            `;
+        }
+    </script>
+</body>
+</html>

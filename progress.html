@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress - TOPCIT Buddy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-blue: #2196F3;
+      --secondary-blue: #64B5F6;
+      --dark-blue: #1565C0;
+      --light-blue: #E3F2FD;
+      --success-green: #4caf50;
+      --warning-orange: #ff9800;
+      --danger-red: #f44336;
+      --text-dark: #212121;
+      --text-gray: #757575;
+      --bg-light: #f5f7fa;
+      --white: #ffffff;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+      --shadow-xl: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #E3F2FD 0%, #f5f7fa 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    .navbar {
+      background: var(--white);
+      padding: 20px 40px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark-blue);
+    }
+
+    .logo-small {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      color: var(--text-gray);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary-blue);
+      background: var(--light-blue);
+    }
+
+    .nav-menu a.active {
+      color: var(--white);
+      background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    /* Added fix */
+    .nav-menu a.active,
+    .nav-menu a.active.highlight {
+      color: white !important;
+    }
+
+    .nav-menu a.highlight {
+      color: var(--primary-blue);
+      box-shadow: inset 0 0 0 2px var(--primary-blue);
+      font-weight: 600;
+    }
+
+    .progress-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .welcome-section {
+      margin-bottom: 40px;
+      animation: slideUp 0.6s ease;
+    }
+
+    .welcome-section h1 {
+      font-size: 42px;
+      color: var(--dark-blue);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--text-gray);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .section-card {
+      background: var(--white);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      animation: slideUp 0.6s ease;
+    }
+
+    .section-card h2 {
+      font-size: 28px;
+      color: var(--dark-blue);
+      margin-bottom: 32px;
+      font-weight: 700;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 350px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      padding: 30px 20px 60px;
+      background: var(--bg-light);
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      max-width: 70px;
+      background: linear-gradient(180deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      transition: all 0.3s ease;
+      margin: 0 6px;
+      box-shadow: 0 -4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    .chart-bar:hover {
+      transform: translateY(-8px);
+      opacity: 0.9;
+      box-shadow: 0 -8px 20px rgba(33, 150, 243, 0.4);
+    }
+
+    .chart-label {
+      position: absolute;
+      bottom: -45px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--text-gray);
+      font-weight: 600;
+      width: 100px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .chart-value {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-blue);
+      background: var(--white);
+      padding: 4px 10px;
+      border-radius: 6px;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .topic-card {
+      padding: 28px;
+      background: var(--bg-light);
+      border-radius: 16px;
+      border-left: 4px solid var(--primary-blue);
+      transition: all 0.3s ease;
+    }
+
+    .topic-card:hover {
+      transform: translateX(8px);
+      box-shadow: var(--shadow);
+    }
+
+    .topic-card.weak { border-left-color: var(--danger-red); }
+    .topic-card.medium { border-left-color: var(--warning-orange); }
+    .topic-card.strong { border-left-color: var(--success-green); }
+
+    .topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .topic-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .topic-score {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-blue);
+    }
+
+    .topic-card.weak .topic-score { color: var(--danger-red); }
+    .topic-card.medium .topic-score { color: var(--warning-orange); }
+    .topic-card.strong .topic-score { color: var(--success-green); }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+      border-radius: 5px;
+      transition: width 0.8s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    .topic-card.weak .progress-fill {
+      background: linear-gradient(90deg, var(--danger-red) 0%, #ef5350 100%);
+    }
+
+    .topic-card.medium .progress-fill {
+      background: linear-gradient(90deg, var(--warning-orange) 0%, #ffb74d 100%);
+    }
+
+    .topic-card.strong .progress-fill {
+      background: linear-gradient(90deg, var(--success-green) 0%, #66bb6a 100%);
+    }
+
+    .topic-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+
+    .no-data {
+      color: var(--text-gray);
+      font-style: italic;
+      text-align: center;
+      padding: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .welcome-section h1 { font-size: 32px; }
+      .chart-container { height: 280px; padding: 20px 10px 50px; }
+      .chart-bar { max-width: 40px; margin: 0 2px; }
+      .chart-label { font-size: 9px; width: 60px; }
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo-small">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                    <path d="M24 4L6 14V24C6 34 14 42 24 44C34 42 42 34 42 24V14L24 4Z" fill="white"/>
+                    <path d="M24 14L16 18V24C16 28 20 32 24 34C28 32 32 28 32 24V18L24 14Z" fill="#2196F3"/>
+                </svg>
+            </div>
+            <span>TOPCIT Buddy</span>
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="progress.html" class="active highlight">Progress</a>
+            <a href="achievements.html" class="highlight">Achievements</a>
+            <a href="profile.html">Profile</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="progress-container">
+        <div class="welcome-section">
+            <h1>Your Learning Progress</h1>
+            <p class="subtitle">Track your performance across all topics</p>
+        </div>
+        
+        <div class="section-card">
+            <h2>Topic Performance Chart</h2>
+            <div class="chart-container" id="chartContainer">
+                <p class="no-data">Complete some tests to see your performance chart</p>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <h2>Topic Analysis</h2>
+            <div class="topic-grid" id="topicGrid">
+                <p class="no-data">Complete some tests to see topic analysis</p>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <h2>Difficulty Performance</h2>
+            <div class="topic-grid" id="difficultyGrid">
+                <p class="no-data">Complete some tests to see difficulty analysis</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        if (localStorage.getItem('topcit_logged_in') !== 'true') { 
+            window.location.href = 'index.html'; 
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            localStorage.removeItem('topcit_logged_in'); 
+            window.location.href = 'index.html'; 
+        });
+        
+        function getUserData() { 
+            const data = localStorage.getItem('topcit_user_data'); 
+            return data ? JSON.parse(data) : null; 
+        }
+        
+        function loadProgressPage() {
+            const userData = getUserData();
+            if (!userData || Object.keys(userData.topicPerformance || {}).length === 0) {
+                return;
+            }
+            
+            const chartContainer = document.getElementById('chartContainer');
+            const topics = Object.entries(userData.topicPerformance)
+                .map(([topic, data]) => ({
+                    topic,
+                    name: data.topicName,
+                    accuracy: data.total > 0 ? (data.correct / data.total) * 100 : 0,
+                    total: data.total
+                }))
+                .sort((a, b) => a.topic.localeCompare(b.topic));
+            
+            if (topics.length > 0) {
+                chartContainer.innerHTML = topics.map(t => {
+                    const height = Math.max(20, (t.accuracy / 100) * 250);
+                    return `
+                        <div class="chart-bar" style="height: ${height}px;" title="${t.name}: ${Math.round(t.accuracy)}%">
+                            <div class="chart-value">${Math.round(t.accuracy)}%</div>
+                            <div class="chart-label">${t.name}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            const topicGrid = document.getElementById('topicGrid');
+            topicGrid.innerHTML = topics.map(t => {
+                const status = t.accuracy >= 80 ? 'strong' : t.accuracy >= 60 ? 'medium' : 'weak';
+                return `
+                    <div class="topic-card ${status}">
+                        <div class="topic-header">
+                            <span class="topic-name">${t.name}</span>
+                            <span class="topic-score">${Math.round(t.accuracy)}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${t.accuracy}%"></div>
+                        </div>
+                        <div class="topic-stats">
+                            <span>${t.total} questions</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            const difficultyGrid = document.getElementById('difficultyGrid');
+            const difficultyData = Object.entries(userData.difficultyPerformance || {})
+                .map(([level, data]) => ({
+                    level: level.charAt(0).toUpperCase() + level.slice(1),
+                    accuracy: data.total > 0 ? (data.correct / data.total) * 100 : 0,
+                    total: data.total
+                }))
+                .filter(d => d.total > 0);
+            
+            if (difficultyData.length > 0) {
+                difficultyGrid.innerHTML = difficultyData.map(d => {
+                    const status = d.accuracy >= 80 ? 'strong' : d.accuracy >= 60 ? 'medium' : 'weak';
+                    return `
+                        <div class="topic-card ${status}">
+                            <div class="topic-header">
+                                <span class="topic-name">${d.level} Questions</span>
+                                <span class="topic-score">${Math.round(d.accuracy)}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${d.accuracy}%"></div>
+                            </div>
+                            <div class="topic-stats">
+                                <span>${d.total} questions</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+        
+        loadProgressPage();
+    </script>
+</body>
+</html>
