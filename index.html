@@ -588,7 +588,7 @@ togglePassword.addEventListener('click', function() {
 function login(username, password) {
     if (username === 'user' && password === '123') {
         localStorage.setItem('topcit_logged_in', 'true');
-        localStorage.setItem('topcit_username', 'Ali');
+        localStorage.setItem('topcit_username', 'User');
         
         if (!localStorage.getItem('topcit_user_data')) {
             const userData = {
