@@ -13,8 +13,13 @@
 
         :root {
             --primary-blue: #2196F3;
+            --secondary-blue: #64B5F6;
             --dark-blue: #1565C0;
+            --darker-blue: #0D47A1;
             --light-blue: #E3F2FD;
+            --purple: #9c27b0;
+            --teal-blue-start: #00695C;
+            --teal-blue-end: #0288D1;
             --text-dark: #212121;
             --text-gray: #757575;
             --bg-light: #f5f7fa;
@@ -30,121 +35,90 @@
             color: var(--text-dark);
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .navbar {
-            background: var(--white);
-            padding: 20px 40px;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--dark-blue);
-        }
-
-        .logo-small {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            color: var(--text-gray);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 8px 16px;
-            border-radius: 8px;
-        }
-
-        .nav-menu a:hover {
-            color: var(--primary-blue);
-            background: var(--light-blue);
-        }
-
-        .nav-menu a.highlight {
-            color: var(--primary-blue);
-            box-shadow: inset 0 0 0 2px var(--primary-blue);
-            font-weight: 600;
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .practice-selector {
             max-width: 900px;
             margin: 0 auto;
-            padding: 40px 24px;
+            padding: 32px 24px;
             animation: fadeIn 0.6s ease;
         }
 
         .selector-card {
             background: var(--white);
-            padding: 48px;
+            padding: 32px;
             border-radius: 20px;
             box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .selector-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
         }
 
         .selector-card h2 {
-            font-size: 32px;
+            font-size: 28px;
             color: var(--dark-blue);
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .selector-group {
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .selector-group label {
             display: block;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .difficulty-options,
         .topic-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px;
+            gap: 16px;
         }
 
         .option-btn {
-            padding: 18px;
+            padding: 16px;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             background: var(--white);
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--text-dark);
+            text-align: center;
         }
 
         .option-btn:hover {
@@ -159,19 +133,19 @@
             background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
             color: var(--white);
             font-weight: 600;
-            box-shadow: 0 6px 16px rgba(33, 150, 243, 0.4);
+            box-shadow: var(--shadow-lg);
         }
 
         .question-count {
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .question-count input {
             width: 100%;
-            padding: 18px 20px;
+            padding: 16px 20px;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s ease;
         }
 
@@ -182,10 +156,10 @@
         }
 
         .btn {
-            padding: 16px 32px;
+            padding: 18px 32px;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -195,39 +169,92 @@
             background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
             color: var(--white);
             width: 100%;
-            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(33, 150, 243, 0.5);
+            box-shadow: var(--shadow-xl);
+        }
+
+        @media (max-width: 968px) {
+            .practice-selector {
+                max-width: 800px;
+            }
         }
 
         @media (max-width: 768px) {
+            .practice-selector {
+                padding: 24px 20px;
+            }
+
             .selector-card {
-                padding: 32px 24px;
+                padding: 24px;
+            }
+
+            .selector-card h2 {
+                font-size: 24px;
+            }
+
+            .selector-group label {
+                font-size: 15px;
+            }
+
+            .option-btn {
+                font-size: 13px;
+            }
+
+            .question-count input {
+                font-size: 14px;
+            }
+
+            .btn-primary {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .practice-selector {
+                padding: 24px 16px;
+            }
+
+            .selector-card {
+                padding: 24px 16px;
+            }
+
+            .selector-card h2 {
+                font-size: 20px;
+            }
+
+            .selector-group label {
+                font-size: 14px;
+            }
+
+            .option-btn {
+                padding: 14px;
+                font-size: 12px;
+            }
+
+            .question-count input {
+                padding: 14px 16px;
+                font-size: 13px;
+            }
+
+            .btn-primary {
+                padding: 14px 24px;
+                font-size: 15px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .practice-selector {
+                max-width: 1000px;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">
-            <div class="logo-small">
-                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                    <path d="M24 4L6 14V24C6 34 14 42 24 44C34 42 42 34 42 24V14L24 4Z" fill="white"/>
-                    <path d="M24 14L16 18V24C16 28 20 32 24 34C28 32 32 28 32 24V18L24 14Z" fill="#2196F3"/>
-                </svg>
-            </div>
-            <span>TOPCIT Buddy</span>
-        </div>
-        <div class="nav-menu">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="progress.html" class="highlight">Progress</a>
-            <a href="#" id="logoutBtn">Logout</a>
-        </div>
-    </nav>
-    
     <div class="practice-selector">
         <div class="selector-card">
             <h2>Customize Your Practice</h2>
@@ -270,9 +297,11 @@
     </div>
     
     <script>
-        if (localStorage.getItem('topcit_logged_in') !== 'true') { window.location.href = 'index.html'; }
-        document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('topcit_logged_in'); window.location.href = 'index.html'; });
-        
+        if (localStorage.getItem('topcit_logged_in') !== 'true') {
+            localStorage.removeItem('topcit_username');
+            window.location.href = 'index.html';
+        }
+
         document.querySelectorAll('.difficulty-options .option-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.difficulty-options .option-btn').forEach(b => b.classList.remove('selected'));

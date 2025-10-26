@@ -28,6 +28,8 @@
     --shadow: 0 2px 8px rgba(0,0,0,0.1);
     --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
     --shadow-xl: 0 8px 32px rgba(0,0,0,0.2);
+    --teal-blue-start: #00695C;
+    --teal-blue-end: #0288D1;
 }
 
 body {
@@ -36,6 +38,7 @@ body {
     color: var(--text-dark);
     min-height: 100vh;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 @keyframes slideUp {
@@ -59,9 +62,9 @@ body {
     50% { opacity: 0.6; }
 }
 
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
 
 .navbar {
@@ -84,6 +87,16 @@ body {
     font-size: 22px;
     font-weight: 700;
     color: var(--dark-blue);
+}
+
+.nav-menu a#logoutBtn {
+    color: var(--danger-red);
+    box-shadow: inset 0 0 0 2px var(--danger-red), 0 2px 8px rgba(244, 67, 54, 0.2);
+}
+.nav-menu a#logoutBtn:hover {
+    color: var(--danger-red);
+    background: var(--light-blue);
+    transform: translateY(-2px);
 }
 
 .logo-small {
@@ -116,6 +129,7 @@ body {
     position: relative;
     padding: 8px 16px;
     border-radius: 8px;
+    font-size: 16px;
 }
 
 .nav-menu a:hover {
@@ -134,6 +148,32 @@ body {
     color: var(--primary-blue);
     box-shadow: inset 0 0 0 2px var(--primary-blue), 0 2px 8px rgba(33, 150, 243, 0.2);
     font-weight: 600;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.hamburger span {
+    width: 24px;
+    height: 3px;
+    background: var(--dark-blue);
+    transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
 }
 
 .container {
@@ -344,7 +384,7 @@ body {
 
 .action-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 24px;
 }
 
@@ -511,43 +551,122 @@ body {
     font-style: italic;
     text-align: center;
     padding: 40px;
+    font-size: 16px;
 }
 
 @media (max-width: 968px) {
     .action-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 }
 
 @media (max-width: 768px) {
     .navbar {
         padding: 16px 20px;
+        flex-wrap: wrap;
     }
-    
+
     .nav-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
         gap: 16px;
-        font-size: 14px;
+        padding: 20px 0;
+        background: var(--white);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        box-shadow: var(--shadow-lg);
+        animation: slideIn 0.3s ease;
     }
-    
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-menu a {
+        padding: 12px 16px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
-    .action-grid {
-        grid-template-columns: 1fr;
-    }
-    
+
     .welcome-section h1 {
         font-size: 32px;
     }
-    
+
     .readiness-section {
         padding: 28px;
     }
-    
+
     .readiness-header {
         flex-direction: column;
         text-align: center;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 24px 16px;
+    }
+
+    .welcome-section h1 {
+        font-size: 28px;
+    }
+
+    .readiness-section {
+        padding: 24px;
+    }
+
+    .readiness-title h2 {
+        font-size: 24px;
+    }
+
+    .readiness-score {
+        font-size: 36px;
+    }
+
+    .readiness-status {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .stats-grid {
+        gap: 16px;
+    }
+
+    .stat-card {
+        padding: 24px;
+    }
+
+    .action-grid {
+        gap: 16px;
+    }
+
+    .action-card {
+        padding: 24px 16px;
+    }
+
+    .section-card, .weak-areas-section {
+        padding: 24px;
+    }
+
+    .section-card h2, .weak-areas-section h2 {
+        font-size: 24px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1300px;
     }
 }
     </style>
@@ -556,18 +675,30 @@ body {
     <nav class="navbar">
         <div class="nav-brand">
             <div class="logo-small">
-                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                    <path d="M24 4L6 14V24C6 34 14 42 24 44C34 42 42 34 42 24V14L24 4Z" fill="white"/>
-                    <path d="M24 14L16 18V24C16 28 20 32 24 34C28 32 32 28 32 24V18L24 14Z" fill="#2196F3"/>
+                <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+                    <path d="M32 12L8 22L32 32L56 22L32 12Z" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M16 26V36C16 36 20 42 32 42C44 42 48 36 48 36V26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M56 22V34" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <rect x="22" y="34" width="20" height="24" rx="2" fill="white" opacity="0.95"/>
+                    <line x1="26" y1="40" x2="38" y2="40" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="26" y1="44" x2="38" y2="44" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="26" y1="48" x2="35" y2="48" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="48" r="10" fill="#4CAF50"/>
+                    <path d="M40 48L42.5 51L48 45" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                 </svg>
             </div>
             <span>TOPCIT Buddy</span>
         </div>
-        <div class="nav-menu">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-menu" id="navMenu">
             <a href="dashboard.html" class="active">Dashboard</a>
-            <a href="progress.html" class="highlight">Progress</a>
-            <a href="achievements.html" class="highlight">Achievements</a>
-            <a href="flashcards.html" class="highlight">Flashcards</a>
+            <a href="progress.html">Progress</a>
+            <a href="achievements.html">Achievements</a>
+            <a href="flashcards.html">Flashcards</a>
             <a href="profile.html">Profile</a>
             <a href="#" id="logoutBtn">Logout</a>
         </div>
@@ -701,32 +832,58 @@ body {
         </div>
         
         <div class="section-card" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; text-align: center; padding: 40px 20px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);">
-        <h2 style="color: white; font-size: 32px; margin-bottom: 16px;">⭐ Daily Certification Challenge ⭐</h2>
-        <p style="font-size: 18px; margin-bottom: 30px; opacity: 0.95;">
-            Complete 25 questions in 20 minutes and earn a certificate with 85%+ score!
-        </p>
-        
-        <a href="daily.html"
-            style="
-            display: inline-block;
-            padding: 14px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-            border: 2px solid white;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            background: transparent;
-            position: relative;
-            overflow: hidden;
-            "
-            onmouseover="this.style.background='white'; this.style.color='#FFA500';"
-            onmouseout="this.style.background='transparent'; this.style.color='white';">
-            Take Today's Challenge
-        </a>
+            <h2 style="color: white; font-size: 32px; margin-bottom: 16px;">⭐ Daily Certification Challenge ⭐</h2>
+            <p style="font-size: 18px; margin-bottom: 30px; opacity: 0.95;">
+                Complete 25 questions in 20 minutes and earn a certificate with 85%+ score!
+            </p>
+            
+            <a href="daily.html"
+                style="
+                display: inline-block;
+                padding: 14px 40px;
+                font-size: 18px;
+                font-weight: 600;
+                color: white;
+                border: 2px solid white;
+                border-radius: 50px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                background: transparent;
+                position: relative;
+                overflow: hidden;
+                "
+                onmouseover="this.style.background='white'; this.style.color='#FFA500';"
+                onmouseout="this.style.background='transparent'; this.style.color='white';">
+                Take Today's Challenge
+            </a>
         </div>
-
+        
+        <div class="section-card" style="background: linear-gradient(135deg, var(--teal-blue-start) 0%, var(--teal-blue-end) 100%); color: white; text-align: center; padding: 40px 20px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.25); margin-bottom: 32px;">
+            <h2 style="color: white; font-size: 32px; margin-bottom: 16px;">📚 Review All TOPCIT Questions 📚</h2>
+            <p style="font-size: 18px; margin-bottom: 30px; opacity: 0.95;">
+                Browse and study all TOPCIT questions by topic or difficulty to master your preparation!
+            </p>
+            
+            <a href="review-questions.html"
+                style="
+                display: inline-block;
+                padding: 14px 40px;
+                font-size: 18px;
+                font-weight: 600;
+                color: white;
+                border: 2px solid white;
+                border-radius: 50px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                background: transparent;
+                position: relative;
+                overflow: hidden;
+                "
+                onmouseover="this.style.background='white'; this.style.color='#00695C';"
+                onmouseout="this.style.background='transparent'; this.style.color='white';">
+                Start Reviewing Questions
+            </a>
+        </div>
         
         <div class="weak-areas-section" id="weakAreasSection">
             <h2>Areas to Focus On</h2>
@@ -736,9 +893,34 @@ body {
         </div>
     </div>
     
-    <script src="js/questions.js"></script>
+    <script src="js/questions-data.js"></script>
     <script src="js/main.js"></script>
     <script>
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
         if (localStorage.getItem('topcit_logged_in') !== 'true') {
             window.location.href = 'index.html';
         }
@@ -746,6 +928,7 @@ body {
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('topcit_logged_in');
+            localStorage.removeItem('topcit_username');
             window.location.href = 'index.html';
         });
         
@@ -843,7 +1026,7 @@ body {
         
         function loadDashboard() {
             const userData = getUserData();
-            const userName = localStorage.getItem('topcit_username') || 'Ali';
+            const userName = localStorage.getItem('topcit_username') || 'User';
             
             document.getElementById('userName').textContent = userName;
             document.getElementById('totalQuestions').textContent = userData.totalQuestions;
